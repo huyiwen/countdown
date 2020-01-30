@@ -10,9 +10,13 @@ import (
 
 const (
 	usage = `usage:
-countdown 25s
-countdown 1m50s
-countdown 2h45m50s
+	countdown 25s
+	countdown 1m50s
+	countdown 2h45m50s
+key binding:
+	p or P: To pause the countdown.
+	c or C: To resume the countdown.
+	Esc or Ctrl+C: To stop the countdown without running next command.
 `
 	tick = time.Second
 )
