@@ -9,14 +9,13 @@ import (
 )
 
 const (
-	usage = `usage:
-	countdown 25s
-	countdown 1m50s
+	usage = `usage
+    countdown 25s
+    countdown 1m50s
 	countdown 2h45m50s
-key binding:
-	p or P: To pause the countdown.
-	c or C: To resume the countdown.
-	Esc or Ctrl+C: To stop the countdown without running next command.
+`
+	keybinding = `Space  pause/resume
+Esc    stop
 `
 	tick = time.Second
 )
@@ -26,6 +25,7 @@ var (
 	ticker         *time.Ticker
 	queues         chan termbox.Event
 	startDone      bool
+	pause          bool
 	startX, startY int
 )
 
@@ -39,6 +39,7 @@ func draw(d time.Duration) {
 	if !startDone {
 		startDone = true
 		startX, startY = w/2-text.width()/2, h/2-text.height()/2
+		fmt.Print(keybinding)
 	}
 
 	x, y := startX, startY
@@ -46,7 +47,7 @@ func draw(d time.Duration) {
 		echo(s, x, y)
 		x += s.width()
 	}
-
+	
 	flush()
 }
 
@@ -65,11 +66,13 @@ func format(d time.Duration) string {
 }
 
 func start(d time.Duration) {
+	pause = false
 	timer = time.NewTimer(d)
 	ticker = time.NewTicker(tick)
 }
 
 func stop() {
+	pause = true
 	timer.Stop()
 	ticker.Stop()
 }
@@ -83,9 +86,18 @@ loop:
 	for {
 		select {
 		case ev := <-queues:
-			if ev.Type == termbox.EventKey && (ev.Key == termbox.KeyEsc || ev.Key == termbox.KeyCtrlC) {
-				exitCode = 1
-				break loop
+			if ev.Type == termbox.EventKey {
+				if ev.Key == termbox.KeyEsc || ev.Key == termbox.KeyCtrlC {
+					exitCode = 1
+					break loop
+				}
+				if ev.Key == termbox.KeySpace {
+					if pause {
+						start(left)
+					} else {
+						stop()
+					}
+				}
 			}
 			if ev.Ch == 'p' || ev.Ch == 'P' {
 				stop()
