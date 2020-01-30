@@ -20,6 +20,7 @@ countdown 1m30s && say "Hello, world"
 
 - `p` or `P`: To pause the countdown.
 - `c` or  `C`: To resume the countdown.
+- `Space`: To pause/resume the countdown.
 - `Esc` or `Ctrl+C`: To stop the countdown without running next command.
 
 ## Install
