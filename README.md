@@ -13,7 +13,7 @@ countdown 25s
 Add command with `&&` to run after countdown.
 
 ```bash
-countdown 1m30s && say "Hello, world"
+countdown 1m30s && tput bel
 ```
 
 ## Key binding
@@ -26,7 +26,7 @@ countdown 1m30s && say "Hello, world"
 ## Install
 
 ```bash
-go get github.com/antonmedv/countdown
+go get github.com/huyiwen/countdown
 ```
 
 ## License
