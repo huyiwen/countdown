@@ -22,6 +22,7 @@ countdown 1m30s && tput bel
 - `c` or  `C`: To resume the countdown.
 - `Space`: To pause/resume the countdown.
 - `Esc` or `Ctrl+C`: To stop the countdown without running next command.
+- `b` or `B`: To turn on/off the bell.
 
 ## Install
 
