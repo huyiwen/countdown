@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"time"
 
 	"github.com/nsf/termbox-go"
@@ -16,7 +17,11 @@ const (
 `
 	keybinding = `Space  pause/resume
 Esc    stop
+b      turn on/off the bell
 `
+	bellon  = `The bell is on `
+	belloff = `The bell is off`
+
 	tick = time.Second
 )
 
@@ -27,6 +32,7 @@ var (
 	startDone      bool
 	pause          bool
 	startX, startY int
+	ring           bool
 )
 
 func draw(d time.Duration) {
@@ -40,6 +46,13 @@ func draw(d time.Duration) {
 		startDone = true
 		startX, startY = w/2-text.width()/2, h/2-text.height()/2
 		fmt.Print(keybinding)
+		/*
+		if ring {
+			fmt.Print(bellon)
+		} else {
+			fmt.Print(belloff)
+		}
+		*/
 	}
 
 	x, y := startX, startY
@@ -47,7 +60,7 @@ func draw(d time.Duration) {
 		echo(s, x, y)
 		x += s.width()
 	}
-	
+
 	flush()
 }
 
@@ -99,6 +112,10 @@ loop:
 					}
 				}
 			}
+			if ev.Ch == 'b' || ev.Ch == 'B' {
+				// startDone = false
+				ring = !ring
+			}
 			if ev.Ch == 'p' || ev.Ch == 'P' {
 				stop()
 			}
@@ -120,6 +137,7 @@ loop:
 }
 
 func main() {
+	ring = true
 	if len(os.Args) != 2 {
 		stderr(usage)
 		os.Exit(2)
@@ -146,4 +164,10 @@ func main() {
 
 	draw(left)
 	countdown(left)
+
+	if ring {
+		cmd := exec.Command("tput","bel")
+		cmd.Stdout = os.Stdout
+		_ = cmd.Run()
+	}
 }
