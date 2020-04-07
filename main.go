@@ -23,6 +23,8 @@ b      turn on/off the bell
 	belloff = `The bell is off`
 
 	tick = time.Second
+
+	Redtime = 5 * time.Second
 )
 
 var (
@@ -55,10 +57,18 @@ func draw(d time.Duration) {
 		*/
 	}
 
-	x, y := startX, startY
-	for _, s := range text {
-		echo(s, x, y)
-		x += s.width()
+	if d <= Redtime {
+		x, y := startX, startY
+		for _, s := range text {
+			echoRed(s, x, y)
+			x += s.width()
+		}
+	} else {
+		x, y := startX, startY
+		for _, s := range text {
+			echo(s, x, y)
+			x += s.width()
+		}
 	}
 
 	flush()

@@ -55,6 +55,18 @@ func echo(s Symbol, startX, startY int) {
 	}
 }
 
+func echoRed(s Symbol, startX, startY int) {
+	x, y := startX, startY
+	for _, line := range s {
+		for _, r := range line {
+			termbox.SetCell(x, y, r, termbox.ColorRed, termbox.ColorDefault)
+			x++
+		}
+		x = startX
+		y++
+	}
+}
+
 func clear() {
 	err := termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 	if err != nil {
